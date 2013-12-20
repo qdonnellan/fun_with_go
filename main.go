@@ -2,9 +2,7 @@ package main
 
 import "fmt"
 
-var x, y, z int
-var c, python, java bool
-
 func main() {
-    fmt.Println(x, y, z, c, python, java)
+  pow := []int{1, 2, 4, 8, 16, 32, 64, 128}
+  fmt.Println(pow)
 }

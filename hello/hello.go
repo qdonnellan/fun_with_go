@@ -1,29 +1,19 @@
 package hello
 
 import (
-  "fmt"
   "net/http"
+  "html/template"
 
   "appengine"
-  "appengine/user"
 )
 
 func init() {
-  http.HandleFunc("/", handler)
+  http.HandleFunc("/", viewHandler)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-  c := appengine.NewContext(r)
-  u := user.Current(c)
-  if u == nil {
-    url, err := user.LoginURL(c, r.URL.String())
-    if err != nil {
-      http.Error(w, err.Error(), http.StatusInternalServerError)
-      return
-    }
-    w.Header().Set("Location", url)
-    w.WriteHeader(http.StatusFound)
-    return
-  }
-  fmt.Fprintf(w, "Hello, %v!", u)
+func viewHandler(w http.ResponseWriter, r *http.Request) {
+    title := r.URL.Path[len("/view/"):]
+    p, _ := loadPage(title)
+    t, _ := template.ParseFiles("view.html")
+    t.Execute(w, p)
 }

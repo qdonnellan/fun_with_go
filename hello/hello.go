@@ -3,17 +3,28 @@ package hello
 import (
   "net/http"
   "html/template"
-
-  "appengine"
 )
 
 func init() {
-  http.HandleFunc("/", viewHandler)
+  http.HandleFunc("/", handler)
 }
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-    title := r.URL.Path[len("/view/"):]
-    p, _ := loadPage(title)
-    t, _ := template.ParseFiles("view.html")
-    t.Execute(w, p)
+type Page struct {
+  FirstName string
+  LastName string
+  Title string
+}
+
+var viewTemplate = template.Must(template.ParseFiles("hello/view.html"))
+
+func handler(w http.ResponseWriter, r *http.Request) {
+  newPage := Page{
+    FirstName: "Julie",
+    LastName: "Wonders",
+    Title: "A very good title",
+  }
+  err := viewTemplate.Execute(w , newPage)
+  if err != nil {
+      http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
 }

@@ -1,5 +1,7 @@
 <h1>{{.Title}}</h1>
 
-<p>[<a href="/edit/{{.Title}}">edit</a>]</p>
+<div>
+  <p>The person's first name is {{.FirstName}}</p>
+  <p>and the person's last name is {{.LastName}}</p>
+</div>
 
-<div>{{printf "%s" .Body}}</div>
